@@ -1,13 +1,16 @@
 # TODO: support for chart-images (in square format) (/ datawrapper-iframes)
-# TODO: rewrite read_xml to call customized from a main.R
-
 rm(list = ls())
 
-parse_xml <- function(file) {
-  doc_xml <- read_xml(file, encoding = "utf8", options = "")
-  # doc_xml <- read_xml("data/input/flightshaming_contra.xml", options = "")
+parse_xml <-
+  function(file, expert_prefix, annotation_checkbox, annotation_text, restart_text, expert_conclusion) {
+    doc_xml <-
+      read_xml(file, encoding = "utf8", options = "")
+    expert_prefix <-
+      glue("<em>{expert_prefix()}</em>")
+    annotation <-
+      glue("{annotation_text()} # CLASS: annotation")
 
-  doc_mxcells <-
+    doc_mxcells <-
     doc_xml %>%
     xml_child() %>%
     xml_child() %>%
@@ -81,8 +84,8 @@ parse_xml <- function(file) {
         )
     ) -> cells_df
 
-  cells_df %>% pull(type) %>% table
-  cells_df %>% pull(textbox_type) %>% table
+  # cells_df %>% pull(type) %>% table
+  # cells_df %>% pull(textbox_type) %>% table
 
 
   # check  for disconnected arrows w/ message output
@@ -241,8 +244,6 @@ parse_xml <- function(file) {
   # initialize ink story with a divert arrow to the first stitch
   ink <- paste0("-> ", start_id, "\n")
   #TODO: remove space at the end, if ready for publication:
-  expert_prefix <- "<em>Das sagt Expertin Melinda Tamás:</em> "
-  annotation <- "Und, wie reagieren Sie? Klicken Sie einfach auf eine der drei Antwortmöglichkeiten und lesen Sie, was die Expertin dazu sagt – und wie Ihr Gegenüber reagiert.# CLASS: annotation"
 
   # loop through row, then targets per row,
   # because each reaction has several options and those have divert targets
@@ -254,8 +255,10 @@ parse_xml <- function(file) {
       "= ", cells_df_reactions$id[i],
       "\n",
       cells_df_reactions$value[i], "\n",
-      if (cells_df_reactions$id[i] == start_id) {
-        paste0("\n\t", annotation, "\n")
+      if (annotation_checkbox() == TRUE) {
+        if (cells_df_reactions$id[i] == start_id) {
+          paste0("\n\t", annotation, "\n")
+        }
       }
       )
 
@@ -269,8 +272,8 @@ parse_xml <- function(file) {
             ink,
             # add expert conclusion before end divert arrow
             #TODO: remove space at the end, if ready for publication:
-            "\n\t\t <em>Das Fazit von Expertin Melinda Tamás: </em>", cells_df$value[cells_df$target ==  cells_df_reactions$id[[i]] & cells_df$textbox_type == "expert"] %>% na.omit(), "\n",
-            "\n\t\t * [Noch mal] # RESTART\n\t\t -> ", start_id, "\n"#,
+            "\n\t\t <em>", expert_conclusion(), "</em>", cells_df$value[cells_df$target ==  cells_df_reactions$id[[i]] & cells_df$textbox_type == "expert"] %>% na.omit(), "\n",
+            "\n\t\t * [", restart_text(),"] # RESTART\n\t\t -> ", start_id, "\n"#,
             # "\t\t-> END"
           )
         } else {
