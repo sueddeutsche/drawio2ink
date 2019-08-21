@@ -1,6 +1,6 @@
 # drawio2ink – Parse a narrative XML from draw.io through R to ink
 
-# Table of Contents
+## Table of Contents
 
  [Getting Started](#getting-started)
 
@@ -14,6 +14,7 @@
 [Using the app](#using-the-app)
 
 - [Configure the output of the app](#configure-the-output-of-the-app)
+- [CSS classes](#css-classes)
 
 [Built With](#built-with)
 
@@ -37,15 +38,15 @@ You don't have to have the IDE [**RStudio**](https://www.rstudio.com/products/rs
 
 All the **R packages** you need to have installed are installed and/or loaded in the app.R file and should be installed automatically when running the app. In case you run into problems, here's the list as well:
 
-* *shiny* – for the web app
-* *shinythemes* – for an eye-pleasing theme
-* *here* – manage the shiny-directories
-* *xml2* – parse XML files
-* *dplyr* – data manipulation
-* *purrr* – looping and manipulating the lists from the XML
-* *stringr* – manipulate strings/characters
-* *readr* – read/write functions
-* *glue* – glue strings and variables together
+- *shiny* – for the web app
+- *shinythemes* – for an eye-pleasing theme
+- *here* – manage the shiny-directories
+- *xml2* – parse XML files
+- *dplyr* – data manipulation
+- *purrr* – looping and manipulating the lists from the XML
+- *stringr* – manipulate strings/characters
+- *readr* – read/write functions
+- *glue* – glue strings and variables together
 
 ### Installing
 
@@ -218,10 +219,21 @@ In our case, we wanted to help the reader get into the discussion. So after the 
 
 If you're done configuring the output, you can upload the XMl file you've exported from draw.io (uncompressed!), check the big preview and download the ink file!
 
+### CSS classes
+
+The parser is currently hard-coded to append specific tags to specific text elements. The pattern `# CLASS: classname` will be translated by ink.js to a CSS class for the corresponding answer/reaction/expert statement. More info on [tags in ink](https://github.com/inkle/ink/blob/master/Documentation/RunningYourInk.md#marking-up-your-ink-content-with-tags). The classes in this parser work currently as follows:
+
+text element | ink output | translated CSS class
+-------------|------------|---------------------
+reaction of the counterpart | # CLASS: opposite | #opposite 
+answer option for the user | # CLASS: self | #self
+expert comment and conclusion | # CLASS: expert | #expert
+introductory annotation | # CLASS: annotation | #annotation
+
 ## Built With
 
-* [R](https://cran.r-project.org/) - The programming language used
-* [Shiny](https://shiny.rstudio.com/) - Web-App framework for use with R
+- [R](https://cran.r-project.org/) - The programming language used
+- [Shiny](https://shiny.rstudio.com/) - Web-App framework for use with R
 
 ## Contributing
 
@@ -229,7 +241,7 @@ We have no guidelines for contributing to this repository yet. Feel free to cont
 
 ## Authors
 
-* **Moritz Zajonz** - *Initial work* - [enigmoe](https://github.com/enigmoe)
+- **Moritz Zajonz** - *Initial work* - [enigmoe](https://github.com/enigmoe)
 
 See also the list of [contributors](https://github.com/sueddeutsche/drawio2ink/contributors) who participated in this project.
 
@@ -239,4 +251,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to [@munichrocker](https://github.com/munichrocker), who helped with the concept of the parser
+- Hat tip to [@munichrocker](https://github.com/munichrocker), who helped with the concept of the parser
