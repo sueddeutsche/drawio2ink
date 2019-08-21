@@ -1,5 +1,30 @@
 # drawio2ink – Parse a narrative XML from draw.io through R to ink
 
+# Table of Contents
+
+ [Getting Started](#getting-started)
+
+- [Prerequisites](#prerequisites)
+- [Installing](#installing)
+
+[Build a story](#build-a-story)
+
+- [Building a valid narrative flow chart](#building-a-valid-narrative-flow-chart)
+
+[Using the app](#using-the-app)
+
+- [Configure the output of the app](#configure-the-output-of-the-app)
+
+[Built With](#built-with)
+
+[Contributing](#contributing)
+
+[Authors](#authors)
+
+[License](#license)
+
+[Acknowledgments](#acknowledgments)
+
 This ShinyApp works as a simple XML-Parser-Web-Interface. The app and parser are written in **R**. The parser converts an XML file exported from the [free online diagram tool draw.io](https://www.draw.io/) to the [narrative scripting language ink](https://www.inklestudios.com/ink/). The generated output is therefore a **.ink** file. This file can then be further processed and edited in the [ink-editor Inky](https://github.com/inkle/inky). We at the Süddeutsche Zeitung used this app to quickly and easily parse a story in draw.io-flow chart XMl-structure because we edited the story often. The resulting longread [can be found here](https://projekte.sueddeutsche.de/artikel/politik/urlaub-und-klimakrise-fliegen-sie-noch-e282839/) (behind our paywall, though).
 
 ## Getting Started
@@ -49,7 +74,7 @@ A new browser window/tab should open with the ShinyApp interface like this:
 
 ## Build a story
 
-### Building a valid narrative flow chart in draw.io
+### Building a valid narrative flow chart
 
 There are some pre-defined assumptions you have to consider building a flow chart for your story in draw.io if you want this parser to work.
 
