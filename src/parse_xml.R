@@ -141,6 +141,12 @@ parse_xml <-
       value = str_replace(value, "\\(Ende\\)", "")
       ) -> cells_df
 
+  # remove HTML-tags in values
+  cells_df %>%
+    mutate(
+      value = gsub("<.*?>", "", value)
+    ) -> cells_df
+
   #TODO: this does not work at the moment, but I don't want to lose the idea
   # replace the weird ids with comprehensible ones;
   # names for stitches in ink are not allowed to have a "-"(minus) in them
@@ -217,8 +223,8 @@ parse_xml <-
       value = str_replace_all(value, "([,.?!])(?=[:alpha:])", "\\1 "),
       value = str_trim(value),
       value = case_when(
-        textbox_type == "reaction" ~ paste0("„", value, "“"),
-        textbox_type == "option" ~ paste0("„", value, "“"),
+        textbox_type == "reaction" ~ paste0("", value, ""), # work here to remove quotations marks
+        textbox_type == "option" ~ paste0("", value, ""),
         TRUE ~ value
       ),
       value = str_replace_all(value, "CO2", "CO₂")
@@ -234,6 +240,13 @@ parse_xml <-
         TRUE ~ value
       )
     ) -> cells_df
+
+  ### RUN FIXES FOR COVID-Vaccination-Bot
+  source("src/fix_covid_bot.R")
+  end_ids <- get_end_ids(cells_df)
+  cells_df <- fix_covid_bot(cells_df)
+
+  ###
 
   # this is necessary to have a separate df with the ids of only the reactions
   cells_df_reactions <- cells_df %>% filter(textbox_type == "reaction")
@@ -299,6 +312,13 @@ parse_xml <-
     }
 
   }
+
+  ### RUN FIXES FOR COVID-Vaccination-Bot
+  end_ids <- stringr::str_c(end_ids, collapse = "(?![0-9])|")
+  ink <- stringr::str_replace_all(ink, end_ids, replace_end_ids)
+
+  ###
+
   return(ink)
 }
 

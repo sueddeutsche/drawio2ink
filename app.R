@@ -50,7 +50,7 @@ ui <- fluidPage(
             h5("Preview with example text:"),
             textOutput("expert_conclusion_preview"),
             hr(),
-            h4("🌅 Introductory Annotation"),
+            h4("Introductory Annotation"),
             checkboxInput(inputId = "annotation_checkbox",
                           label = "Enable a introductory annotation? (Appears after the first reaction of the counterpart)",
                           value = TRUE),
@@ -66,7 +66,6 @@ ui <- fluidPage(
                       value = "Noch mal",
                       placeholder = "Bsp.: Noch mal"),
             hr(),
-
             h3("📝 Apply these settings to a file"),
             h4("📂 Input"),
             fileInput(
@@ -110,6 +109,10 @@ server <- function(input, output, session) {
         expert_conclusion <-
             reactive({
                 input$expert_conclusion_input
+            })
+        quotes_checkbox <-
+            reactive({
+                input$quotes_checkbox
             })
         annotation_checkbox <-
             reactive({
